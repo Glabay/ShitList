@@ -1,6 +1,5 @@
-package xyz.glabaystudios.shitlist.api.data.model;
+package xyz.glabaystudios.shitlist.api.data.dto;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,19 +14,12 @@ import java.util.Collection;
  */
 @Getter
 @Setter
-@Entity
-public class Shitter {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long uid;
-
+public class ShitterDTO {
     private Long discordId;
     private Long listId;
     private Long totalShitPoints;
 
-    @OneToMany(mappedBy = "discordId", cascade = CascadeType.ALL)
-    Collection<Shit> stupidShit = new ArrayList<>();
+    private Collection<ShitDTO> stupidShit = new ArrayList<>();
 
 
     private String createdOn;

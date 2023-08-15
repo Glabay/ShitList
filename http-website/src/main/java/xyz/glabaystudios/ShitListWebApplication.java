@@ -1,13 +1,13 @@
-package xyz.glabaystudios.shitlist;
+package xyz.glabaystudios;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShitListApplication {
+public class ShitListWebApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ShitListApplication.class, args);
+        SpringApplication.run(ShitListWebApplication.class, args);
     }
 
 }

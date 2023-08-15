@@ -1,4 +1,7 @@
-package xyz.glabaystudios.shitlist.api.data.model;
+package xyz.glabaystudios.shitlist.api.data.repo;
 
-public interface ShitListRepository extends org.springframework.data.jpa.repository.JpaRepository<xyz.glabaystudios.shitlist.api.data.model.ShitList, java.lang.Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import xyz.glabaystudios.shitlist.api.data.model.ShitList;
+
+public interface ShitListRepository extends JpaRepository<ShitList, Long> {
 }

@@ -1,9 +1,10 @@
 package xyz.glabaystudios.listeners;
 
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import xyz.glabaystudios.handler.impl.RegistrationForm;
 
 import java.util.Objects;
 
@@ -13,17 +14,17 @@ import java.util.Objects;
  * @social Discord: Glabay | Website: www.GlabayStudios.xyz
  * @since 2023-08-15
  */
-public class DiscordListener extends ListenerAdapter {
+public class FormModalListener extends ListenerAdapter {
 
     @Override
-    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+    public void onModalInteraction(@NotNull ModalInteractionEvent event) {
         Member disMem = event.getMember();
         if (Objects.isNull(disMem)) return;
-        String commandName = event.getInteraction().getName();
+        String formName = event.getModalId();
 
-        switch (commandName.toLowerCase()) {
-
-            default -> System.err.println("Unhandled Slash Command... ".concat(commandName));
+        switch (formName) {
+            case "REGISTRATION_FORM" -> new RegistrationForm().handleModalSubmission(event);
+            default -> System.err.println("Unhandled Form Modal... ".concat(formName));
         }
     }
 }

@@ -1,32 +1,30 @@
 package xyz.glabaystudios.shitlist.utils.translators;
 
-import xyz.glabaystudios.shitlist.api.data.dto.ShitListDTO;
-import xyz.glabaystudios.shitlist.api.data.model.ShitList;
+import xyz.glabaystudios.shitlist.api.data.dto.ProfileDTO;
+import xyz.glabaystudios.shitlist.api.data.model.Profile;
 import xyz.glabaystudios.shitlist.utils.DateTimeUtils;
 
-import java.util.Objects;
-
 /**
- * @author Glaba
+ * @author Glabay
  * @project ShitList
  * @social Discord: Glabay | Website: www.GlabayStudios.xyz
  * @since 2023-08-15
  */
-public interface ShitListDataObjectTranslator extends DateTimeUtils, ShitterDataObjectTranslator {
+public interface ProfileDataObjectTranslator extends DateTimeUtils, ShitListDataObjectTranslator {
 
     /**
      * Convert a Concrete Object from the database, to a Data Transfer Object, for passing around the service layers, as well as over the network
-     * @param model The {@link ShitList} to convert to a DTO
+     * @param model The {@link Profile} to convert to a DTO
      * @return The Data Transfer Object, without Database identifying information
      */
-    default ShitListDTO fromObjectModel(ShitList model) {
-        var dto = new ShitListDTO();
-            dto.setListName(model.getListName());
-            dto.setDiscordOwnerId(model.getDiscordOwnerId());
+    default ProfileDTO fromObjectModel(Profile model) {
+        var dto = new ProfileDTO();
+            dto.setDiscordUserId(model.getDiscordUserId());
+            dto.setUsername(model.getUsername());
+            dto.setUserEmail(model.getUserEmail());
             dto.setCreatedOn(model.getCreatedOn());
             dto.setUpdatedOn(model.getUpdatedOn());
-            var shits = model.getShitters().stream().filter(Objects::nonNull).map(this::fromObjectModel).toList();
-            dto.setShitters(shits);
+            dto.setShitList(fromObjectModel(model.getShitList()));
         return dto;
     }
 

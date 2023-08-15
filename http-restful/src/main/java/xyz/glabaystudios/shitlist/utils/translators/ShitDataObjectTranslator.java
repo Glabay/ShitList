@@ -1,7 +1,8 @@
-package xyz.glabaystudios.shitlist.utils;
+package xyz.glabaystudios.shitlist.utils.translators;
 
 import xyz.glabaystudios.shitlist.api.data.dto.ShitDTO;
 import xyz.glabaystudios.shitlist.api.data.model.Shit;
+import xyz.glabaystudios.shitlist.utils.DateTimeUtils;
 
 /**
  * @author Glaba
@@ -22,7 +23,6 @@ public interface ShitDataObjectTranslator extends DateTimeUtils {
             dto.setReason(model.getReason());
             dto.setCreatedOn(model.getCreatedOn());
             dto.setDiscordId(model.getDiscordId());
-
         return dto;
     }
 

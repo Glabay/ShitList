@@ -1,4 +1,4 @@
-package xyz.glabaystudios.dislib.util;
+package xyz.glabaystudios.shitlist.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

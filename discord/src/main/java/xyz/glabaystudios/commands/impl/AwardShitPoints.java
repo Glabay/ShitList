@@ -2,12 +2,14 @@ package xyz.glabaystudios.commands.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.http.util.EntityUtils;
 import xyz.glabaystudios.DiscordMessages;
 import xyz.glabaystudios.commands.DisSlash;
 import xyz.glabaystudios.network.GlabayStudiosNetwork;
-import xyz.glabaystudios.network.dto.ProfileDTO;
+import xyz.glabaystudios.network.dto.ShitDTO;
+import xyz.glabaystudios.network.dto.ShitterDTO;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -18,26 +20,37 @@ import java.util.Objects;
  * @social Discord: Glabay | Website: www.GlabayStudios.xyz
  * @since 2023-08-15
  */
-public class AddShitter implements DisSlash, GlabayStudiosNetwork, DiscordMessages {
+public class AwardShitPoints implements DisSlash, GlabayStudiosNetwork, DiscordMessages {
 
     @Override
     public void handleSlashCommand(SlashCommandInteractionEvent event) {
         Member disMem = event.getMember();
         if (Objects.isNull(disMem)) return;
-        var shitterId = 0L;
         var shitter = Objects.requireNonNull(event.getOption("shitter")).getAsMember();
-        if (Objects.nonNull(shitter)) shitterId = shitter.getIdLong();
+        if (Objects.isNull(shitter)) return;
 
-        var uri = BASE_API_ENDPOINT.concat("/v1/profile/add/shitter/").concat("%d/%d".formatted(disMem.getIdLong(), shitterId));
+        var reason = Objects.requireNonNull(event.getOption("reason")).getAsString();
+        var points = Objects.requireNonNull(event.getOption("points")).getAsLong();
+        var shitterId = shitter.getIdLong();
+
+        var uri = BASE_API_ENDPOINT.concat("/v1/profile/add/shitPoints");
         try {
-            var response = submitHttpPostWithReply(uri, getHttpClient());
+            var dto = new ShitDTO();
+                dto.setDiscordId(shitterId);
+                dto.setReason(reason);
+                dto.setPoints(points);
+
+            var response = submitHttpPostWithBodyAwaitReply(uri, getStringEntityFromDTO(dto), getHttpClient());
             if (response.getStatusLine().getStatusCode() == 200) {
-                var profile = new ObjectMapper().readValue(EntityUtils.toString(response.getEntity(), "UTF-8"), ProfileDTO.class);
-                if (Objects.nonNull(profile)) {
-                    var builder = getEmbeddedMessage(
+                var shitterDTO = new ObjectMapper().readValue(EntityUtils.toString(response.getEntity(), "UTF-8"), ShitterDTO.class);
+                if (Objects.nonNull(shitterDTO)) {
+                    var field = new MessageEmbed.Field("Total Shit Points", shitterDTO.getTotalShitPoints().toString(), true);
+                    var builder = getEmbeddedMessageWithFields(
                             "Shit List",
-                            "Added a little Shitter",
-                            "Successfully added some little shit to you list that did you wrong or something stupid... either way we added them!");
+                            "Points Awarded",
+                            "`%s` has been awarded `%d` points for `%s`"
+                                    .formatted(shitter.getEffectiveName(), points, reason),
+                            field);
                     event.replyEmbeds(builder.build()).queue();
                 }
                 else

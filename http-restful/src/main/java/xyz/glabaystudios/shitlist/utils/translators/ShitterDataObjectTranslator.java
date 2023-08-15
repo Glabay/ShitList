@@ -1,7 +1,8 @@
-package xyz.glabaystudios.shitlist.utils;
+package xyz.glabaystudios.shitlist.utils.translators;
 
 import xyz.glabaystudios.shitlist.api.data.dto.ShitterDTO;
 import xyz.glabaystudios.shitlist.api.data.model.Shitter;
+import xyz.glabaystudios.shitlist.utils.DateTimeUtils;
 
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public interface ShitterDataObjectTranslator extends DateTimeUtils, ShitDataObje
      */
     default ShitterDTO fromObjectModel(Shitter model) {
         var dto = new ShitterDTO();
-            dto.setListId(model.getListId());
+            dto.setListId(Objects.isNull(model.getShitList()) ? -1L : model.getShitList().getUid());
             dto.setDiscordId(model.getDiscordId());
             dto.setCreatedOn(model.getCreatedOn());
             dto.setUpdatedOn(model.getUpdatedOn());

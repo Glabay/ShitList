@@ -1,7 +1,31 @@
-package xyz.glabaystudios.shitlist.api.data.model;/**
- * @project ShitList
+package xyz.glabaystudios.shitlist.api.data.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
  * @author Glaba
- * @since 2023-08-15
+ * @project ShitList
  * @social Discord: Glabay | Website: www.GlabayStudios.xyz
-*/public class Shit {
+ * @since 2023-08-15
+ */
+
+@Getter
+@Setter
+@Entity
+public class Shit {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long uid;
+
+    private Long discordId;
+    private String reason;
+    private Long points;
+    private String createdOn;
+
+    @ManyToOne
+    private Shitter shit;
+
 }
