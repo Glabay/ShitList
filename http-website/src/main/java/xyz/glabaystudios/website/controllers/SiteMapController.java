@@ -18,6 +18,6 @@ public class SiteMapController {
 
     @GetMapping({"/", "/home", "/index"})
     public String getHomePage() {
-
+        return "index";
     }
 }
