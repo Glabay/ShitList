@@ -1,9 +1,12 @@
 package xyz.glabaystudios.website.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Objects;
 
 /**
  * @author Glabay
@@ -17,7 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SiteMapController {
 
     @GetMapping({"/", "/home", "/index"})
-    public String getHomePage() {
+    public String getHomePage(HttpServletRequest request) {
         return "index";
+    }
+
+    @GetMapping("/admin")
+    public String getAdminPage(HttpServletRequest request) {
+        if (Objects.isNull(request.getRemoteUser()))
+            return "redirect:/login";
+        return "admin";
     }
 }

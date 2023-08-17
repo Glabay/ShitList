@@ -1,0 +1,59 @@
+.wrapper {
+    padding-bottom: 40px;
+}
+
+.is-blurple {
+    background-color: #7289da;
+    color: #fff;
+}
+
+.is-blurple:hover {
+    background-color: #697ec4;
+    color: #fff;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.team-list {
+    margin: auto;
+}
+.team-list img {
+    height: 45px;
+    width: 45px;
+    margin: auto;
+}
+
+.team-container {
+    padding-top: 50px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.footer-logo {
+    min-height: 64px;
+    max-height: 100px;
+    width: auto;
+    max-width: 240px;
+}
+
+.footer-sides {
+    width: 25%;
+}
+
+.discord-link {
+    margin: auto;
+    margin: 15px;
+    max-height: 75px !important;
+}

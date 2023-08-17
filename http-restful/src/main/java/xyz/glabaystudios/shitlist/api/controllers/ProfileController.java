@@ -3,11 +3,13 @@ package xyz.glabaystudios.shitlist.api.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import xyz.glabaystudios.shitlist.api.data.dto.ProfileDTO;
 import xyz.glabaystudios.shitlist.api.data.dto.ShitDTO;
 import xyz.glabaystudios.shitlist.api.data.dto.ShitterDTO;
 import xyz.glabaystudios.shitlist.api.service.ProfileService;
+import xyz.glabaystudios.shitlist.api.service.ShitService;
 import xyz.glabaystudios.shitlist.api.service.ShitterService;
 import xyz.glabaystudios.shitlist.utils.translators.ProfileDataObjectTranslator;
 
@@ -27,10 +29,11 @@ import java.util.Objects;
 public class ProfileController implements ProfileDataObjectTranslator {
     private final ProfileService profileService;
     private final ShitterService shitterService;
+    private final ShitService shitService;
 
-    @GetMapping("/fetch/{discordId}")
-    public ResponseEntity<ProfileDTO> getPlayerProfileForUser(@PathVariable Long discordId) {
-        var profile = profileService.getProfileForUser(discordId);
+    @GetMapping("/fetch/{username}")
+    public ResponseEntity<ProfileDTO> getPlayerProfileForUser(@PathVariable String username) {
+        var profile = profileService.getProfileForUser(username);
         if (Objects.isNull(profile))
             // There was no content to return to the user
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -39,13 +42,14 @@ public class ProfileController implements ProfileDataObjectTranslator {
             return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-    @PostMapping("/create/{discordId}/{username}/{email}")
+    @PostMapping("/create/{discordId}/{username}/{email}/{password}")
     public ResponseEntity<ProfileDTO> createNewProfile(
             @PathVariable Long discordId,
             @PathVariable String email,
-            @PathVariable String username
+            @PathVariable String username,
+            @PathVariable String password
     ) {
-        var profile = profileService.createNewProfile(discordId, username, email);
+        var profile = profileService.createNewProfile(discordId, username, email, new BCryptPasswordEncoder().encode(password));
         if (Objects.isNull(profile))
             // There was no content to return to the user
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -63,7 +67,7 @@ public class ProfileController implements ProfileDataObjectTranslator {
         if (Objects.isNull(profile))
             // There was no content to return to the user
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        var shitter = shitterService.createNewShitter(shitterId);
+        var shitter = shitterService.createNewShitter(listOwnerId, shitterId);
         Collection<ShitterDTO> shitters = new ArrayList<>(profile.getShitList().getShitters());
         shitters.add(shitter);
         profile.getShitList().setShitters(shitters);
@@ -85,7 +89,7 @@ public class ProfileController implements ProfileDataObjectTranslator {
         Collection<ShitDTO> shitters = new ArrayList<>(shitter.getStupidShit());
         shitters.add(stupidShitDto);
         shitter.setStupidShit(shitters);
-
+        shitService.createNewShit(stupidShitDto);
         shitterService.updateShitter(shitter);
         return new ResponseEntity<>(shitter, HttpStatus.OK);
     }

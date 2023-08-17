@@ -29,9 +29,10 @@ public class RegistrationForm implements ModalHandler, GlabayStudiosNetwork, Dis
         List<ModalMapping> fields = event.getValues();
         var username = fields.get(0).getAsString();
         var email = fields.get(1).getAsString();
+        var password = fields.get(2).getAsString();
         var discordId = disMem.getIdLong();
 
-        var uri = BASE_API_ENDPOINT.concat("/v1/profile/create/").concat("%d/%s/%s".formatted(discordId, username, email));
+        var uri = BASE_API_ENDPOINT.concat("/v1/profile/create/").concat("%d/%s/%s/%s".formatted(discordId, username, email, password));
         try {
             var response = submitHttpPostWithReply(uri, getHttpClient());
             if (response.getStatusLine().getStatusCode() == 200) {

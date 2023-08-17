@@ -16,6 +16,7 @@ public class ProfileDTO {
 
     private String username;
     private String userEmail;
+    private String password;
 
     private String createdOn;
     private String updatedOn;

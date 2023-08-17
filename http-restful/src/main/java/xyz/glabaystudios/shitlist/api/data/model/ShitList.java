@@ -26,6 +26,6 @@ public class ShitList {
     private String updatedOn;
 
     @OneToOne
-    private Profile profile;
+    private transient Profile profile;
 
 }

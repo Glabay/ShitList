@@ -97,7 +97,7 @@ public class Discord {
     }
 
     private JDABuilder getJdaBuilder() {
-        String DISCORD_TOKEN = "MTE0MDgzOTgzNzQyODA4ODg2Mg.GNgLi3.zuRnk1vTSBbfLsObarcKScniDM17r0Ay4hiKkE";
+        String DISCORD_TOKEN = "MTE0MDgzOTgzNzQyODA4ODg2Mg.GSe2HE.nuCaQTffQiRS30ZmIZKBYYE2lMVbTOKxxhZAXc";
         if (Objects.isNull(jdaBuilder))
             jdaBuilder = JDABuilder.createDefault(DISCORD_TOKEN,
                     //Bot Intents

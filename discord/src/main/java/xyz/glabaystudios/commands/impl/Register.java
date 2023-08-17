@@ -31,10 +31,17 @@ public class Register implements DisSlash {
                 .setRequired(true)
                 .build();
 
+        var password = TextInput.create("PASSWORD_INPUT", "Enter a password.", TextInputStyle.SHORT)
+                .setPlaceholder("1337P433")
+                .setRequired(true)
+                .build();
+
         var registrationForm = Modal.create("REGISTRATION_FORM", "Register yourself for a Shit List")
                 .addActionRow(username)
                 .addActionRow(email)
+                .addActionRow(password)
                 .build();
+
         event.replyModal(registrationForm).queue();
     }
 }

@@ -1,4 +1,4 @@
-package xyz.glabaystudios.shitlist.api.data.dto;
+package xyz.glabaystudios.network.models.dto;
 
 import lombok.Getter;
 import lombok.Setter;

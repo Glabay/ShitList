@@ -27,6 +27,14 @@ public class ProfileService implements ProfileDataObjectTranslator {
         return null;
     }
 
+    public ProfileDTO getProfileForUser(String username) {
+        if (profileRepository.findByUsernameIgnoreCase(username).isPresent()) {
+            var profile = profileRepository.findByUsernameIgnoreCase(username).get();
+            return fromObjectModel(profile);
+        }
+        return null;
+    }
+
     public boolean updatedProfileDetails(Long discordId, ProfileDTO dto) {
         if (profileRepository.findByDiscordUserId(discordId).isPresent()) {
             var profile = profileRepository.findByDiscordUserId(discordId).get();
@@ -39,15 +47,23 @@ public class ProfileService implements ProfileDataObjectTranslator {
         return false;
     }
 
-    public Profile createNewProfile(Long discordId, String username, String email) {
+    public Profile createNewProfile(Long discordId, String username, String email, String password) {
         var profile = new Profile();
             profile.setDiscordUserId(discordId);
             profile.setUsername(username);
             profile.setUserEmail(email);
+            profile.setPassword(password);
             profile.setCreatedOn(getCurrentDateAndTime());
             profile.setUpdatedOn(getCurrentDateAndTime());
-        shitListService.saveList(profile.getShitList());
+        var list = profile.getShitList();
+            list.setCreatedOn(getCurrentDateAndTime());
+            list.setUpdatedOn(getCurrentDateAndTime());
+            list.setListName(username.concat("'s Shit List"));
+            list.setDiscordOwnerId(discordId);
+            list.setProfile(profile);
+        profile.setShitList(list);
         profileRepository.save(profile);
+        shitListService.saveList(profile.getShitList());
         return profile;
     }
 

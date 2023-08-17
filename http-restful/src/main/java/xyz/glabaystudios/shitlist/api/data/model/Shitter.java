@@ -25,7 +25,7 @@ public class Shitter {
     private Long discordId;
     private Long totalShitPoints;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "shit", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "shitter", cascade = CascadeType.ALL)
     private Collection<Shit> stupidShit = new ArrayList<>();
 
 

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.glabaystudios.shitlist.api.data.dto.ShitterDTO;
 import xyz.glabaystudios.shitlist.api.data.model.Shitter;
+import xyz.glabaystudios.shitlist.api.data.repo.ProfileRepository;
+import xyz.glabaystudios.shitlist.api.data.repo.ShitListRepository;
 import xyz.glabaystudios.shitlist.api.data.repo.ShitterRepository;
 import xyz.glabaystudios.shitlist.utils.DateTimeUtils;
 import xyz.glabaystudios.shitlist.utils.translators.ShitterDataObjectTranslator;
@@ -19,19 +21,27 @@ import xyz.glabaystudios.shitlist.utils.translators.ShitterDataObjectTranslator;
 @RequiredArgsConstructor
 public class ShitterService implements DateTimeUtils, ShitterDataObjectTranslator {
     private final ShitterRepository shitterRepository;
+    private final ProfileRepository profileRepository;
+    private final ShitListRepository shitListRepository;
 
     public void saveShitter(Shitter shitter) {
+        shitListRepository.save(shitter.getShitList());
         shitterRepository.save(shitter);
     }
 
-    public ShitterDTO createNewShitter(Long shitterId) {
-        var model = new Shitter();
-            model.setDiscordId(shitterId);
-            model.setTotalShitPoints(0L);
-            model.setCreatedOn(getCurrentDateAndTime());
-            model.setUpdatedOn(getCurrentDateAndTime());
-        saveShitter(model);
-        return fromObjectModel(model);
+    public ShitterDTO createNewShitter(Long listOwnerId, Long shitterId) {
+        if (profileRepository.findByDiscordUserId(listOwnerId).isPresent()) {
+            var profile = profileRepository.findByDiscordUserId(listOwnerId).get();
+            var model = new Shitter();
+                model.setDiscordId(shitterId);
+                model.setTotalShitPoints(0L);
+                model.setCreatedOn(getCurrentDateAndTime());
+                model.setUpdatedOn(getCurrentDateAndTime());
+                model.setShitList(profile.getShitList());
+            saveShitter(model);
+            return fromObjectModel(model);
+        }
+        return null;
     }
 
     public ShitterDTO getShitterForId(Long discordId) {

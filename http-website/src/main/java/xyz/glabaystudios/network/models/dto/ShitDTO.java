@@ -1,6 +1,5 @@
-package xyz.glabaystudios.shitlist.api.data.model;
+package xyz.glabaystudios.network.models.dto;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,19 +12,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-public class Shit {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long uid;
+public class ShitDTO {
 
     private Long discordId;
     private String reason;
     private Long points;
     private String createdOn;
-
-    @ManyToOne
-    private Shitter shitter;
 
 }

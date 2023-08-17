@@ -21,6 +21,7 @@ public class Profile {
     private Long discordUserId;
     private String username;
     private String userEmail;
+    private String password;
     private String createdOn;
     private String updatedOn;
 
